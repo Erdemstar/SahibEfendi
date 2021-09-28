@@ -5,8 +5,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using SahibEfendi.Model.UserModel;
+using SahibEfendi.Model.FileModel;
+using File = SahibEfendi.Model.FileModel.File;
 
-namespace SahibEfendi.Handler.File
+namespace SahibEfendi.Handler
 {
     public class FileHandler
     {
@@ -85,7 +88,7 @@ namespace SahibEfendi.Handler.File
                 files = Directory.GetFiles(DestinationDirectory, "*.*", SearchOption.AllDirectories);
                 return files;
             }
-            catch (Exception excpt)
+            catch
             {
                 return null;
             }
@@ -112,5 +115,6 @@ namespace SahibEfendi.Handler.File
                     return "n/a";
             }
         }
+    
     }
 }

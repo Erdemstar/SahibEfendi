@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using SahibEfendi.Model.FileModel;
+using SahibEfendi.Model.UserModel;
 using System.Collections.Generic;
 
 namespace SahibEfendi.Service.FileService
@@ -8,12 +9,18 @@ namespace SahibEfendi.Service.FileService
     {
         private readonly IMongoCollection<File> _files;
 
+        private readonly IMongoCollection<User> _users;
+
+        
+        // File Service Function
+
         public FileService(IFileDatabaseSetting settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _files = database.GetCollection<File>("ZipFiles");
+            _users = database.GetCollection<User>("Users");
         }
 
         public File GetFileById(string id)
@@ -33,6 +40,12 @@ namespace SahibEfendi.Service.FileService
         {
             // Tüm verileri getir ve buna ek olarak silinmemiş olsun
             return _files.Find<File>(f => true && f.IsDeleted == false).ToList();
+        }
+
+        public List<File> GetAllFilebyUserId(string userId)
+        {
+            // Tüm verileri getir ve buna ek olarak silinmemiş olsun
+            return _files.Find<File>(f => f.UserId == userId && f.IsDeleted == false).ToList();
         }
 
         public File UpdateFile(string id, File file)
@@ -63,6 +76,13 @@ namespace SahibEfendi.Service.FileService
             return file;
         }
 
+        // UserServiceFunction
+        
+        public User GetUserById(string id)
+        {
+            // kullanıcı silinmemiş ve Id'sı mevcutsa getir.
+            return _users.Find(user => user.Id == id && user.isDeleted == false).FirstOrDefault();
+        }
 
 
     }
